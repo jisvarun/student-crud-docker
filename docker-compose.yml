@@ -10,10 +10,14 @@ services:
     volumes:
       - ./:/var/www/html
 
+    restart: unless-stopped
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hostel.rule=Host(`hostelcampus.com`)"
-      - "traefik.http.routers.hostel.entrypoints=web"
+      - "traefik.http.routers.hostel.entrypoints=websecure"
+      - "traefik.http.routers.hostel.tls=true"
+      - "traefik.http.routers.hostel.tls.certresolver=letsencrypt"
       - "traefik.http.services.hostel.loadbalancer.server.port=80"
 
     networks:
