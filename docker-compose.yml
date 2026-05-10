@@ -1,16 +1,24 @@
 services:
-  php:
-    build: .
+  app:
+    image: php:8.2-apache
+
+    container_name: hostel-app
+
     ports:
-      - "8000:8000"
+      - "8000:80"
+
     volumes:
-      - .:/var/www/html
+      - ./:/var/www/html
+
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.hostel.rule=Host(`hostelcampus.com`) || Host(`www.hostelcampus.com`)"
+      - "traefik.http.routers.hostel.rule=Host(`hostelcampus.com`)"
       - "traefik.http.routers.hostel.entrypoints=web"
-      - "traefik.http.services.hostel.loadbalancer.server.port=8000"
+      - "traefik.http.services.hostel.loadbalancer.server.port=80"
+
+    networks:
+      - traefik
+
 networks:
-  default:
+  traefik:
     external: true
-    name: traefik
